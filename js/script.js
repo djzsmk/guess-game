@@ -64,5 +64,39 @@ const makeGuess = function (guess) {
     } else {
         guessedLetters.push(guess)
         console.log(guessedLetters)
+        usedLetters()
+        updateChallange(guessedLetters)
+        
     };
+};
+
+const usedLetters = function () {
+    guessLetter.innerHTML = "";
+    for(const letter of guessedLetters) {
+        const li = document.createElement("li")
+        li.innerText = letter;
+        guessLetter.append(li);
+    }
+};
+
+const updateChallange = function (guessedLetters){
+    const wordUpper = word.toUpperCase ();
+    const wordArray = wordUpper.split("")
+    const answer = []
+    for(const letter of wordArray) {
+        if(guessedLetters.includes(letter)) {
+        answer.push(letter.toUpperCase())
+        } else{
+            answer.push ("●")
+        }
+    }
+    challange.innerText = answer.join("")
+    checkWin()
+}
+
+const checkWin = function () {
+    if(word.toUpperCase () === challange.innerText) {
+        hint.classList.add("win")
+        hint.innerHTML = `<p class= "highlight">You guessed correct the word! Congrats!</p>`
+    }
 }
