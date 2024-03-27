@@ -12,12 +12,13 @@ const guessButton =document.querySelector(".guess");
 const letterInput =document.querySelector(".letter");
 const challange =document.querySelector(".word-in-progress");
 const chances =document.querySelector(".remaining");
-const chancesSpan =document.querySelector("remaining.span");
+const chancesSpan =document.querySelector(".remaining span");
 const hint =document.querySelector(".message");
 const redo =document.querySelector(".play-again");
 
 const word = "magnolia";
 const guessedLetters = []
+let remainingGuesses = 8
 
 const progress = function (word) {
     const progressLetters = [];
@@ -64,6 +65,7 @@ const makeGuess = function (guess) {
     } else {
         guessedLetters.push(guess)
         console.log(guessedLetters)
+        numGuesses(guess)
         usedLetters()
         updateChallange(guessedLetters)
         
@@ -94,9 +96,29 @@ const updateChallange = function (guessedLetters){
     checkWin()
 }
 
+const numGuesses = function(guess) {
+    const upperWord = word.toUpperCase ()
+    if (!upperWord.includes(guess)) {
+        hint.innerText= `Sorry, the word has no ${guess}.`
+        remainingGuesses -= 1
+    }else{
+        hint.innerText= `Awesome! The word does have the letter ${guess}.`
+        
+    }
+
+    if (remainingGuesses === 0) {
+        hint.innerText = `Game over! The word was <span class="highlight">${word}</span>`
+    }else if (remainingGuesses === 1) {
+        chancesSpan.innerText = `${remainingGuesses} guess`
+        } else {
+        chancesSpan.innerText = `${remainingGuesses} guesses`
+    }
+};
+
 const checkWin = function () {
     if(word.toUpperCase () === challange.innerText) {
         hint.classList.add("win")
         hint.innerHTML = `<p class= "highlight">You guessed correct the word! Congrats!</p>`
     }
 }
+
