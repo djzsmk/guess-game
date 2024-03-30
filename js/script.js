@@ -17,7 +17,7 @@ const hint =document.querySelector(".message");
 const redo =document.querySelector(".play-again");
 
 let word = "magnolia";
-const guessedLetters = []
+let guessedLetters = []
 let remainingGuesses = 8
 const getWord = async function () {
     const results = await fetch( 
@@ -119,7 +119,9 @@ const numGuesses = function(guess) {
     }
 
     if (remainingGuesses === 0) {
-        hint.innerText = `Game over! The word was <span class="highlight">${word}</span>`
+        hint.classList.add("highlight")
+        hint.innerText = `Game over! The word was ${word}.`
+        startOver()
     }else if (remainingGuesses === 1) {
         chancesSpan.innerText = `${remainingGuesses} guess`
         } else {
@@ -132,6 +134,27 @@ const checkWin = function () {
         hint.classList.add("win")
         hint.classList.add("highlight")
         hint.innerHTML= "You guessed correctly! Congrats!"
+        startOver()
     }
 }
 
+const startOver = function () {
+    guessButton.classList.add("hide")
+    chances.classList.add("hide")
+    guessLetter.classList.add("hide")
+    redo.classList.remove("hide")
+}
+
+redo.addEventListener ("click", function(e) {
+    hint.classList.remove("win")
+    hint.innerText = ""
+    guessLetter.innerHTML = ""
+    remainingGuesses = 8
+    guessedLetters = []
+    chancesSpan.innerText = `${remainingGuesses} guesses`
+    guessButton.classList.remove("hide")
+    getWord()
+    redo.classList.add("hide")
+    chances.classList.remove("hide")
+    guessLetter.classList.remove("hide")
+})
