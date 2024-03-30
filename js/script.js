@@ -16,20 +16,32 @@ const chancesSpan =document.querySelector(".remaining span");
 const hint =document.querySelector(".message");
 const redo =document.querySelector(".play-again");
 
-const word = "magnolia";
+let word = "magnolia";
 const guessedLetters = []
 let remainingGuesses = 8
+const getWord = async function () {
+    const results = await fetch( 
+        "https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt"
+        );
+    const words = await results.text();
+    //console.log(data);
+    const wordArray = words.split("\n")
+    const randomIndex = Math.floor(Math.random()*wordArray.length)
+    word = wordArray[randomIndex].trim()
+    placeholder(word)
+}
+getWord()
+//console.log(wordArray)
 
-const progress = function (word) {
-    const progressLetters = [];
+
+const placeholder = function (word) {
+    const placeholderLetters = [];
     for (const letter of word) {
         console.log(letter);
-        progressLetters.push("●")
+        placeholderLetters.push("●")
     }
-    challange.innerText = progressLetters.join("");
+    challange.innerText = placeholderLetters.join("");
 };
-
-progress(word);
 
 guessButton.addEventListener ("click" , function (e) {
     e.preventDefault();
@@ -118,7 +130,8 @@ const numGuesses = function(guess) {
 const checkWin = function () {
     if(word.toUpperCase () === challange.innerText) {
         hint.classList.add("win")
-        hint.innerHTML = `<p class= "highlight">You guessed correct the word! Congrats!</p>`
+        hint.classList.add("highlight")
+        hint.innerHTML= "You guessed correctly! Congrats!"
     }
 }
 
